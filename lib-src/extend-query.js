@@ -4,6 +4,8 @@ module.exports = function(mongoose, cache, debug) {
   let exec = mongoose.Query.prototype.exec;
 
   mongoose.Query.prototype.exec = function(op, callback = function() { }) {
+    if(this.model.schema._ttl) this._ttl = this.model.schema._ttl;
+    
     if (!this.hasOwnProperty('_ttl')) return exec.apply(this, arguments);
 
     if (typeof op === 'function') {
